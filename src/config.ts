@@ -7,10 +7,10 @@ export enum TriggerMode {
 }
 
 export const TRIGGER_MODE_TEXT = {
-  [TriggerMode.Always]: { title: 'Always', desc: 'GoogleBard is queried on every search' },
+  [TriggerMode.Always]: { title: 'Always', desc: 'Bard is queried on every search' },
   [TriggerMode.Manually]: {
     title: 'Manually',
-    desc: 'GoogleBard is queried when you manually click a button',
+    desc: 'Bard is queried when you manually click a button',
   },
 }
 

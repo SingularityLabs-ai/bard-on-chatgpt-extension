@@ -172,7 +172,7 @@ function ChatGPTQuery(props: Props) {
     return (
       <div className="markdown-body gpt-markdown" id="gpt-answer" dir="auto">
         <div className="gpt-header">
-          <span className="font-bold">GoogleBard</span>
+          <span className="font-bold">BardonChatGPT</span>
           <span className="cursor-pointer leading-[0]" onClick={openOptionsPage}>
             <GearIcon size={14} />
           </span>

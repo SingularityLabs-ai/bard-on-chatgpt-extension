@@ -1,4 +1,4 @@
-# GoogleBard
+# BardonChatGPT
 
 [link-chrome]: https://chrome.google.com/webstore/detail/scigpt/pkeofncjnjaleflnefmnnlabbfigfjhd?hl=en&authuser=0 'Chrome Web Store'
 

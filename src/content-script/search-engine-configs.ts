@@ -7,10 +7,10 @@ export interface SearchEngine {
 }
 
 export const config: Record<string, SearchEngine> = {
-  google: {
-    inputQuery: ['form textarea'],
-    bodyQuery: ['form textarea'],
-    sidebarContainerQuery: ['#rcnt'],
+  openai: {
+    inputQuery: ['form #prompt-textarea'],
+    bodyQuery: ['form #prompt-textarea'],
+    sidebarContainerQuery: ['#__next > div:n-thchild(1) > div:n-thchild(2)'],
     appendContainerQuery: ['#res'],
   },
 }
