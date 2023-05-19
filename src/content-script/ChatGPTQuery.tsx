@@ -8,7 +8,6 @@ import { captureEvent } from '../analytics'
 import { Answer } from '../messaging'
 import ChatGPTFeedback from './ChatGPTFeedback'
 import { isBraveBrowser, shouldShowRatingTip } from './utils.js'
-// import { setGprops } from './ChatGPTContainer';
 
 export type QueryStatus = 'success' | 'error' | undefined
 
@@ -46,7 +45,6 @@ function ChatGPTQuery(props: Props) {
   const [questionIndex, setQuestionIndex] = useState(0)
   const [reQuestionLatestAnswerText, setReQuestionLatestAnswerText] = useState<string | undefined>()
 
-  // console.log('props.questionMeta at ChatGPTQuery(BEGIN):', props.questionMeta)
   useEffect(() => {
     props.onStatusChange?.(status)
   }, [props, status])
@@ -66,9 +64,6 @@ function ChatGPTQuery(props: Props) {
       }
     }
     port.onMessage.addListener(listener)
-    // console.log('answer1:', answer)
-
-    // conversationContext =
     port.postMessage({
       question: props.question,
       contextIds: props.contextIds,
@@ -81,10 +76,6 @@ function ChatGPTQuery(props: Props) {
   }, [props.question, retry])
   console.log('answer2:', answer)
   console.log('answer2?.conversationContext:', answer?.conversationContext)
-  // console.log('props at ChatGPTQuery(b4):', props.questionMeta?.conversationContext)
-  // console.log('answer:', answer)
-  // props.questionMeta.conversationContext = answer?.conversationContext
-  // console.log('props at ChatGPTQuery(ar):', props.questionMeta?.conversationContext)
 
   const nav_buts = document.querySelectorAll('nav button')
   nav_buts[nav_buts.length - 1].innerHTML =
