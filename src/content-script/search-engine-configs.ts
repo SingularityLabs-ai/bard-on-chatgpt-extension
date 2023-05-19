@@ -11,6 +11,6 @@ export const config: Record<string, SearchEngine> = {
     inputQuery: ['form #prompt-textarea'],
     bodyQuery: ['form #prompt-textarea'],
     sidebarContainerQuery: ['div.overflow-hidden.w-full.h-full.relative.flex'], //div[class="scrollbar-trigger"]'],//div:nth-child(1) > div:nth-child(2)'],//'nav'],//'form > div > div:nth-child(1) > div > button'],//'#__next > div:n-thchild(1) > div:n-thchild(2)'],
-    appendContainerQuery: ['nav'], // ['div > div > div > main > div > div > div > div > div.w-full.h-32.md'],
+    appendContainerQuery: ['#gpt-answer'], // ['div > div > div > main > div > div > div > div > div.w-full.h-32.md'],
   },
 }

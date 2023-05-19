@@ -17,6 +17,7 @@ interface Props {
   questionMeta: any
   promptSource: string
   onStatusChange?: (status: QueryStatus) => void
+  questionMeta: any
 }
 
 interface Requestion {
@@ -43,13 +44,10 @@ function ChatGPTQuery(props: Props) {
   const [questionIndex, setQuestionIndex] = useState(0)
   const [reQuestionLatestAnswerText, setReQuestionLatestAnswerText] = useState<string | undefined>()
 
+  console.log('props.questionMeta at ChatGPTQuery(BEGIN):', props.questionMeta)
   useEffect(() => {
     props.onStatusChange?.(status)
   }, [props, status])
-
-  // useEffect(() => {
-  //   ChatGPTContainersetGprops(props)
-  // }, [props.questionMeta])
 
   useEffect(() => {
     const port = Browser.runtime.connect()
@@ -66,13 +64,20 @@ function ChatGPTQuery(props: Props) {
       }
     }
     port.onMessage.addListener(listener)
-    console.log('props at ChatGPTQuery:', props)
-    port.postMessage({ question: props.question })
+    console.log('answer1:', answer)
+
+    port.postMessage({ question: props.question, conversationContext: answer?.conversationContext })
     return () => {
       port.onMessage.removeListener(listener)
       port.disconnect()
     }
   }, [props.question, retry])
+  console.log('answer2:', answer)
+  console.log('answer2?.conversationContext:', answer?.conversationContext)
+  console.log('props at ChatGPTQuery(b4):', props)
+  // console.log('answer:', answer)
+  props.questionMeta.conversationContext = answer?.conversationContext
+  console.log('props at ChatGPTQuery(ar):', props)
 
   // retry error on focus
   useEffect(() => {
@@ -114,6 +119,7 @@ function ChatGPTQuery(props: Props) {
           setRequestionList(requestionListValue)
           const latestAnswerText = requestionList[questionIndex]?.answer?.text
           setReQuestionLatestAnswerText(latestAnswerText)
+          console.log('answer3:', answer)
         } else if (msg.event === 'DONE') {
           setReQuestionDone(true)
           setQuestionIndex(questionIndex + 1)
@@ -123,6 +129,8 @@ function ChatGPTQuery(props: Props) {
       }
     }
     port.onMessage.addListener(listener)
+    console.log('answer4:', answer)
+
     port.postMessage({
       question: requestionList[questionIndex].requestion,
       conversationId: answer?.conversationId,
@@ -135,13 +143,6 @@ function ChatGPTQuery(props: Props) {
           ? answer?.conversationContext
           : requestionList[questionIndex - 1].answer?.conversationContext,
     })
-    props.questionMeta.conversationId = answer?.conversationId
-    props.questionMeta.parentMessageId =
-      questionIndex == 0 ? answer?.messageId : requestionList[questionIndex - 1].answer?.messageId
-    props.questionMeta.conversationContext =
-      questionIndex == 0
-        ? answer?.conversationContext
-        : requestionList[questionIndex - 1].answer?.conversationContext
     return () => {
       port.onMessage.removeListener(listener)
       port.disconnect()

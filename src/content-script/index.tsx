@@ -49,6 +49,7 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
     promptSource,
     userConfig.triggerMode,
   )
+
   render(
     <ChatGPTContainer
       question={question}
@@ -67,6 +68,20 @@ async function render_already_mounted(
   siteConfig: SearchEngine,
 ) {
   console.log('props at index(render_already_mounted):', question, questionMeta, promptSource)
+  console.log('props at index(render_already_mounted):questionMeta:', questionMeta)
+  console.log(
+    'props at index(render_already_mounted):questionMeta.conversationContext:',
+    questionMeta.conversationContext,
+  )
+
+  container.classList.add('sidebar-free')
+  const appendContainer = getPossibleElementByQuerySelector(siteConfig.appendContainerQuery)
+  console.log('appendContainer', appendContainer)
+  if (appendContainer) {
+    appendContainer.appendChild(container)
+  }
+  // document.querySelectorAll("#gpt-answer p")
+
   render(
     <ChatGPTContainer
       question={question}

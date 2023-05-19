@@ -1,5 +1,4 @@
 import { useState } from 'react'
-// import { useEffect, useState } from 'preact/hooks'
 import useSWRImmutable from 'swr/immutable'
 import { fetchPromotion } from '../api'
 import { TriggerMode } from '../config'
@@ -13,8 +12,6 @@ interface Props {
   triggerMode: TriggerMode
 }
 
-// const [gprops, setGprops] = useState<Props>()
-
 function ChatGPTContainer(props: Props) {
   const [queryStatus, setQueryStatus] = useState<QueryStatus>()
   const query = useSWRImmutable(
@@ -22,10 +19,6 @@ function ChatGPTContainer(props: Props) {
     fetchPromotion,
     { shouldRetryOnError: false },
   )
-
-  // useEffect(() => {
-  //   console.log("props changed from chile at ChatGPTContainer:", props);
-  // }, [props])
 
   console.log('props at ChatGPTContainer:', props)
   return (
@@ -44,6 +37,3 @@ function ChatGPTContainer(props: Props) {
 }
 
 export default ChatGPTContainer
-// export { setGprops };
-
-// export { default ChatGPTContainer, setGprops };
