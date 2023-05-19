@@ -37,21 +37,12 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
       appendContainer.appendChild(container)
     }
   }
-  console.log()
 
-  const questionMeta = {}
-  console.log(
-    'props at index(mount):',
-    question,
-    questionMeta,
-    promptSource,
-    userConfig.triggerMode,
-  )
+  console.log('props at index(mount):', question, promptSource, userConfig.triggerMode)
 
   render(
     <ChatGPTContainer
       question={question}
-      questionMeta={questionMeta}
       promptSource={promptSource}
       triggerMode={userConfig.triggerMode || 'always'}
     />,
@@ -59,24 +50,17 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
   )
 }
 
-function scrollToBottom(element) {
-  element.scroll({ top: element.scrollHeight, behavior: 'smooth' })
-}
-
 interface Props {
   question: string
-  questionMeta: any
   promptSource: string
   triggerMode: TriggerMode
 }
 async function render_already_mounted(
   question: string,
-  questionMeta: any,
   promptSource: string,
   siteConfig: SearchEngine,
 ) {
-  console.log('props at index(render_already_mounted):', question, questionMeta, promptSource)
-  const props: Props = {}
+  console.log('props at index(render_already_mounted):', question, promptSource)
   container = document.createElement('div')
   const allps = document.querySelectorAll('.chat-gpt-container') //#gpt-answer")
   allps[allps.length - 1].appendChild(container)
@@ -156,7 +140,7 @@ window.onload = function () {
       console.log('final prompt:', bodyInnerText)
       const gpt_container = document.querySelector('div.chat-gpt-container')
       if (!gpt_container) mount(bodyInnerText, 'default', siteConfig)
-      else render_already_mounted(bodyInnerText, {}, 'default', siteConfig)
+      else render_already_mounted(bodyInnerText, 'default', siteConfig)
       // const cgdpt_el = document.querySelector(".chat-gpt-container");
       gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
     }
