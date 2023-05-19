@@ -61,6 +61,12 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
   )
 }
 
+interface Props {
+  question: string
+  questionMeta: any
+  promptSource: string
+  triggerMode: TriggerMode
+}
 async function render_already_mounted(
   question: string,
   questionMeta: any,
@@ -68,24 +74,42 @@ async function render_already_mounted(
   siteConfig: SearchEngine,
 ) {
   console.log('props at index(render_already_mounted):', question, questionMeta, promptSource)
-  console.log('props at index(render_already_mounted):questionMeta:', questionMeta)
-  console.log(
-    'props at index(render_already_mounted):questionMeta.conversationContext:',
-    questionMeta.conversationContext,
-  )
+  // console.log('props at index(render_already_mounted):questionMeta:', questionMeta)
 
-  container.classList.add('sidebar-free')
-  const appendContainer = getPossibleElementByQuerySelector(siteConfig.appendContainerQuery)
-  console.log('appendContainer', appendContainer)
-  if (appendContainer) {
-    appendContainer.appendChild(container)
-  }
-  // document.querySelectorAll("#gpt-answer p")
+  // container.classList.add('sidebar-free')
+  // const appendContainer = getPossibleElementByQuerySelector(siteConfig.appendContainerQuery)
+  // console.log('appendContainer', appendContainer)
+  // if (appendContainer) {
+  //   appendContainer.appendChild(container)
+  // }
+  const props: Props = {}
+  container = document.createElement('div')
+  const allps = document.querySelectorAll('.chat-gpt-container') //#gpt-answer")
+  allps[allps.length - 1].appendChild(container)
+
+  const nav_buts = document.querySelectorAll('nav button')
+  // let divs = nav_buts[nav_buts.length - 1].querySelectorAll("div");
+  // console.log("nav_buts[nav_buts.length - 1].textContent", nav_buts[nav_buts.length - 1].textContent);
+  const ids = nav_buts[nav_buts.length - 1].textContent.split(',')
+  const contextIds = [ids[0], ids[1], ids[2]]
+  const requestParams = {}
+  requestParams.atValue = ids[3]
+  requestParams.blValue = ids[4]
+  console.log('contextIds', contextIds)
+  console.log('requestParams', requestParams)
+  // props.question = question;
+  // if (questionMeta) props.questionMeta=questionMeta;
+  // // props.promptSource=promptSource;
+  // console.log(
+  //   'props at index(render_already_mounted):questionMeta.conversationContext:',
+  //   props.questionMeta.conversationContext,
+  // )
 
   render(
     <ChatGPTContainer
       question={question}
-      questionMeta={questionMeta}
+      contextIds={contextIds}
+      requestParams={requestParams}
       promptSource={promptSource}
       triggerMode={'always'}
     />,

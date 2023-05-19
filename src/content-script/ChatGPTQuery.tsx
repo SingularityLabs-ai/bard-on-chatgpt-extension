@@ -12,12 +12,14 @@ import { isBraveBrowser, shouldShowRatingTip } from './utils.js'
 
 export type QueryStatus = 'success' | 'error' | undefined
 
+import { TriggerMode } from '../config'
 interface Props {
   question: string
-  questionMeta: any
+  contextIds: any
+  requestParams: any
   promptSource: string
+  triggerMode: TriggerMode
   onStatusChange?: (status: QueryStatus) => void
-  questionMeta: any
 }
 
 interface Requestion {
@@ -44,7 +46,7 @@ function ChatGPTQuery(props: Props) {
   const [questionIndex, setQuestionIndex] = useState(0)
   const [reQuestionLatestAnswerText, setReQuestionLatestAnswerText] = useState<string | undefined>()
 
-  console.log('props.questionMeta at ChatGPTQuery(BEGIN):', props.questionMeta)
+  // console.log('props.questionMeta at ChatGPTQuery(BEGIN):', props.questionMeta)
   useEffect(() => {
     props.onStatusChange?.(status)
   }, [props, status])
@@ -64,9 +66,14 @@ function ChatGPTQuery(props: Props) {
       }
     }
     port.onMessage.addListener(listener)
-    console.log('answer1:', answer)
+    // console.log('answer1:', answer)
 
-    port.postMessage({ question: props.question, conversationContext: answer?.conversationContext })
+    // conversationContext =
+    port.postMessage({
+      question: props.question,
+      contextIds: props.contextIds,
+      requestParams: props.requestParams,
+    })
     return () => {
       port.onMessage.removeListener(listener)
       port.disconnect()
@@ -74,10 +81,18 @@ function ChatGPTQuery(props: Props) {
   }, [props.question, retry])
   console.log('answer2:', answer)
   console.log('answer2?.conversationContext:', answer?.conversationContext)
-  console.log('props at ChatGPTQuery(b4):', props)
+  // console.log('props at ChatGPTQuery(b4):', props.questionMeta?.conversationContext)
   // console.log('answer:', answer)
-  props.questionMeta.conversationContext = answer?.conversationContext
-  console.log('props at ChatGPTQuery(ar):', props)
+  // props.questionMeta.conversationContext = answer?.conversationContext
+  // console.log('props at ChatGPTQuery(ar):', props.questionMeta?.conversationContext)
+
+  const nav_buts = document.querySelectorAll('nav button')
+  nav_buts[nav_buts.length - 1].innerHTML =
+    answer?.conversationContext?.contextIds +
+    ',' +
+    answer?.conversationContext?.requestParams.atValue +
+    ',' +
+    answer?.conversationContext?.requestParams.blValue
 
   // retry error on focus
   useEffect(() => {
@@ -187,7 +202,7 @@ function ChatGPTQuery(props: Props) {
     return (
       <div className="markdown-body gpt-markdown" id="gpt-answer" dir="auto">
         <div className="gpt-header">
-          <span className="font-bold">BardonChatGPT</span>
+          <span className="font-bold">Bard</span>
           <span className="cursor-pointer leading-[0]" onClick={openOptionsPage}>
             <GearIcon size={14} />
           </span>
@@ -219,28 +234,6 @@ function ChatGPTQuery(props: Props) {
             </div>
           ))}
         </div>
-
-        {done && (
-          <form
-            id="requestion"
-            style={{ display: 'flex' }}
-            onSubmit={(e) => {
-              // submit when press enter key
-              e.preventDefault()
-            }}
-          >
-            <input
-              disabled={!reQuestionDone}
-              type="text"
-              ref={inputRef}
-              placeholder="Tell Me More"
-              id="question"
-            />
-            <button id="submit" onClick={requeryHandler}>
-              ASK
-            </button>
-          </form>
-        )}
       </div>
     )
   }

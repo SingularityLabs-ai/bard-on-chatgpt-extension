@@ -1,7 +1,7 @@
 import ExpiryMap from 'expiry-map'
 import { ofetch } from 'ofetch'
 
-import { ConversationContext, GenerateAnswerParams, Provider } from '../types'
+import { GenerateAnswerParams, Provider } from '../types'
 
 async function request(token: string, method: string, path: string, data?: unknown) {
   return fetch(`https://chat.openai.com/backend-api${path}`, {
@@ -49,7 +49,9 @@ export async function getBardAccessToken(): Promise<string> {
 }
 
 export class BARDProvider implements Provider {
-  private conversationContext?: ConversationContext
+  // private conversationContext?: ConversationContext
+  private contextIds?: any
+  private requestParams?: any
 
   constructor(private token: string) {
     this.token = token
@@ -92,16 +94,25 @@ export class BARDProvider implements Provider {
         setConversationProperty(this.token, conversationId, { is_visible: false })
       }
     }
-    this.conversationContext = params.conversationContext
+    // this.conversationContext = params.conversationContext
+    this.contextIds = params.contextIds
+    this.requestParams = params.requestParams
 
-    if (!this.conversationContext) {
+    if (!this.contextIds || !this.requestParams) {
       this.conversationContext = {
         requestParams: await this.fetchRequestParams(),
         contextIds: ['', '', ''],
       }
+    } else {
+      this.conversationContext = {
+        requestParams: this.requestParams,
+        contextIds: this.contextIds,
+      }
     }
+
     const { requestParams, contextIds } = this.conversationContext
-    console.debug('request ids:', contextIds)
+    console.debug('context ids:', contextIds)
+    console.debug('requestParams :', requestParams)
     const resp = await ofetch(
       'https://bard.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate',
       {

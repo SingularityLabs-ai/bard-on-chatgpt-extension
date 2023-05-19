@@ -3,14 +3,16 @@ import { getProviderConfigs, ProviderType } from '../config'
 import { BARDProvider, sendMessageFeedbackBard } from './providers/bard'
 import { ChatGPTProvider, getChatGPTAccessToken, sendMessageFeedback } from './providers/chatgpt'
 import { OpenAIProvider } from './providers/openai'
-import { ConversationContext, Provider } from './types'
+import { Provider } from './types'
 
 async function generateAnswers(
   port: Browser.Runtime.Port,
   question: string,
   conversationId: string | undefined,
   parentMessageId: string | undefined,
-  conversationContext: ConversationContext | undefined,
+  // conversationContext: ConversationContext | undefined,
+  contextIds: any,
+  requestParams: any,
 ) {
   const providerConfigs = await getProviderConfigs()
 
@@ -43,9 +45,11 @@ async function generateAnswers(
       }
       port.postMessage(event.data)
     },
-    conversationId: conversationId, //used for chatGPT
-    parentMessageId: parentMessageId, //used for chatGPT
-    conversationContext: conversationContext, //used for BARD
+    // conversationId: conversationId, //used for chatGPT
+    // parentMessageId: parentMessageId, //used for chatGPT
+    // conversationContext: conversationContext, //used for BARD
+    contextIds: contextIds, //used for BARD
+    requestParams: requestParams, //used for BARD
   })
 }
 
@@ -58,7 +62,9 @@ Browser.runtime.onConnect.addListener((port) => {
         msg.question,
         msg.conversationId,
         msg.parentMessageId,
-        msg.conversationContext,
+        // msg.conversationContext,
+        msg.contextIds,
+        msg.requestParams,
       )
     } catch (err: any) {
       console.error(err)
