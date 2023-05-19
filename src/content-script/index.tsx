@@ -50,11 +50,6 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
   )
 }
 
-interface Props {
-  question: string
-  promptSource: string
-  triggerMode: TriggerMode
-}
 async function render_already_mounted(
   question: string,
   promptSource: string,
