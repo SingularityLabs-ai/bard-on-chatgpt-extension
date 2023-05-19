@@ -7,8 +7,11 @@ import { config, SearchEngine } from './search-engine-configs'
 import './styles.scss'
 import { getPossibleElementByQuerySelector } from './utils'
 
+// const [gprops, setGprops] = useState<Gprops>()
+
+let container = document.createElement('div')
+
 async function mount(question: string, promptSource: string, siteConfig: SearchEngine) {
-  const container = document.createElement('div')
   container.className = 'chat-gpt-container'
 
   const userConfig = await getUserConfig()
@@ -25,21 +28,51 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
   }
 
   const siderbarContainer = getPossibleElementByQuerySelector(siteConfig.sidebarContainerQuery)
+  console.log('siderbarContainer', siderbarContainer)
   if (siderbarContainer) {
     siderbarContainer.prepend(container)
   } else {
     container.classList.add('sidebar-free')
     const appendContainer = getPossibleElementByQuerySelector(siteConfig.appendContainerQuery)
+    console.log('appendContainer', appendContainer)
     if (appendContainer) {
       appendContainer.appendChild(container)
     }
   }
+  console.log()
 
+  const questionMeta = {}
+  console.log(
+    'props at index(mount):',
+    question,
+    questionMeta,
+    promptSource,
+    userConfig.triggerMode,
+  )
   render(
     <ChatGPTContainer
       question={question}
+      questionMeta={questionMeta}
       promptSource={promptSource}
       triggerMode={userConfig.triggerMode || 'always'}
+    />,
+    container,
+  )
+}
+
+async function render_already_mounted(
+  question: string,
+  questionMeta: any,
+  promptSource: string,
+  siteConfig: SearchEngine,
+) {
+  console.log('props at index(render_already_mounted):', question, questionMeta, promptSource)
+  render(
+    <ChatGPTContainer
+      question={question}
+      questionMeta={questionMeta}
+      promptSource={promptSource}
+      triggerMode={'always'}
     />,
     container,
   )
@@ -51,7 +84,7 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
  * @param index question index
  */
 export async function requeryMount(question: string, index: number) {
-  const container = document.querySelector<HTMLDivElement>('.question-container')
+  container = document.querySelector<HTMLDivElement>('.question-container')
   let theme: Theme
   const questionItem = document.createElement('div')
   questionItem.className = `question-${index}`
@@ -82,33 +115,27 @@ try {
 }
 const siteConfig = config[siteName]
 
-async function run() {
-  const searchInput = getPossibleElementByQuerySelector<HTMLInputElement>(siteConfig.inputQuery)
-  console.debug('Try to Mount chat-gpt-container on', siteName)
-
-  if (siteConfig.bodyQuery) {
-    const bodyElement = getPossibleElementByQuerySelector(siteConfig.bodyQuery)
-    console.debug('bodyElement', bodyElement)
-
-    if (bodyElement && bodyElement.textContent) {
-      const bodyInnerText = bodyElement.textContent.trim().replace(/\s+/g, ' ').substring(0, 1500)
-      console.log('Body: ' + bodyInnerText)
-      const userConfig = await getUserConfig()
-
-      const found = userConfig.promptOverrides.find(
-        (override) => new URL(override.site).hostname === location.hostname,
-      )
-      const question = found?.prompt ?? userConfig.prompt
-      const promptSource = found?.site ?? 'default'
-
-      console.log('final prompt:', question + bodyInnerText)
-      mount(question + bodyInnerText, promptSource, siteConfig)
-    }
-  }
+if (siteConfig.watchRouteChange) {
+  // siteConfig.watchRouteChange(run)
 }
 
-run()
+window.onload = function () {
+  console.log('Page load completed')
+  const textarea = document.getElementById('prompt-textarea')
 
-if (siteConfig.watchRouteChange) {
-  siteConfig.watchRouteChange(run)
+  textarea.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault() // Prevent the default Enter key behavior (e.g., line break)
+      const text = event.target.value
+      console.log('Enter key pressed! Text: ' + text)
+      const bodyInnerText = text.trim().replace(/\s+/g, ' ').substring(0, 1500)
+      console.log('Body: ' + bodyInnerText)
+      console.log('location.hostname', location.hostname)
+      console.log('siteConfig', siteConfig)
+      console.log('final prompt:', bodyInnerText)
+      const gpt_container = document.querySelector('div.chat-gpt-container')
+      if (!gpt_container) mount(bodyInnerText, 'default', siteConfig)
+      else render_already_mounted(bodyInnerText, {}, 'default', siteConfig)
+    }
+  })
 }

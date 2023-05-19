@@ -8,11 +8,13 @@ import { captureEvent } from '../analytics'
 import { Answer } from '../messaging'
 import ChatGPTFeedback from './ChatGPTFeedback'
 import { isBraveBrowser, shouldShowRatingTip } from './utils.js'
+// import { setGprops } from './ChatGPTContainer';
 
 export type QueryStatus = 'success' | 'error' | undefined
 
 interface Props {
   question: string
+  questionMeta: any
   promptSource: string
   onStatusChange?: (status: QueryStatus) => void
 }
@@ -45,6 +47,10 @@ function ChatGPTQuery(props: Props) {
     props.onStatusChange?.(status)
   }, [props, status])
 
+  // useEffect(() => {
+  //   ChatGPTContainersetGprops(props)
+  // }, [props.questionMeta])
+
   useEffect(() => {
     const port = Browser.runtime.connect()
     const listener = (msg: any) => {
@@ -60,6 +66,7 @@ function ChatGPTQuery(props: Props) {
       }
     }
     port.onMessage.addListener(listener)
+    console.log('props at ChatGPTQuery:', props)
     port.postMessage({ question: props.question })
     return () => {
       port.onMessage.removeListener(listener)
@@ -128,6 +135,13 @@ function ChatGPTQuery(props: Props) {
           ? answer?.conversationContext
           : requestionList[questionIndex - 1].answer?.conversationContext,
     })
+    props.questionMeta.conversationId = answer?.conversationId
+    props.questionMeta.parentMessageId =
+      questionIndex == 0 ? answer?.messageId : requestionList[questionIndex - 1].answer?.messageId
+    props.questionMeta.conversationContext =
+      questionIndex == 0
+        ? answer?.conversationContext
+        : requestionList[questionIndex - 1].answer?.conversationContext
     return () => {
       port.onMessage.removeListener(listener)
       port.disconnect()
