@@ -34,7 +34,7 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
   const siderbarContainer = getPossibleElementByQuerySelector(siteConfig.sidebarContainerQuery)
   // console.log('siderbarContainer', siderbarContainer)
   if (siderbarContainer) {
-    siderbarContainer.prepend(container)
+    siderbarContainer.append(container)
   } else {
     container.classList.add('sidebar-free')
     const appendContainer = getPossibleElementByQuerySelector(siteConfig.appendContainerQuery)
