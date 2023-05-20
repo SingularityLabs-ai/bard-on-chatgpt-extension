@@ -9,14 +9,8 @@ import { getPossibleElementByQuerySelector } from './utils'
 
 let container = document.createElement('div')
 
-// function scrollToDiv() {
-//   // this.scrollIntoView();
-//   // this.scroll({ top: this.scrollHeight, behavior: 'smooth' })
-// };
-
 async function mount(question: string, promptSource: string, siteConfig: SearchEngine) {
   container.className = 'chat-gpt-container'
-  // container.setAttribute("onchange", "scrollToDiv()");
 
   const userConfig = await getUserConfig()
   let theme: Theme
@@ -87,7 +81,6 @@ async function render_already_mounted(
     />,
     container,
   )
-  // scrollToBottom(container);
 }
 
 /**
