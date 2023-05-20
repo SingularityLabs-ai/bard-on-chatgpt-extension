@@ -56,6 +56,7 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
   )
 }
 
+let last_query_time = 1
 async function render_already_mounted(
   question: string,
   promptSource: string,
@@ -74,6 +75,7 @@ async function render_already_mounted(
   requestParams.blValue = ids[4]
   console.log('contextIds', contextIds)
   console.log('requestParams', requestParams)
+  last_query_time = Date.now()
 
   render(
     <ChatGPTContainer
@@ -147,6 +149,9 @@ window.onload = function () {
 }
 
 window.setInterval(function () {
-  const gpt_container = document.querySelector('div.chat-gpt-container')
-  gpt_container.scrollTop = gpt_container.scrollHeight
+  console.log('times=', Date.now(), last_query_time, Date.now() - last_query_time < 19000)
+  if (Date.now() - last_query_time < 24000) {
+    const gpt_container = document.querySelector('div.chat-gpt-container')
+    gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
+  }
 }, 5000)
