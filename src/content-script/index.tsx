@@ -9,8 +9,14 @@ import { getPossibleElementByQuerySelector } from './utils'
 
 let container = document.createElement('div')
 
+// function scrollToDiv() {
+//   // this.scrollIntoView();
+//   // this.scroll({ top: this.scrollHeight, behavior: 'smooth' })
+// };
+
 async function mount(question: string, promptSource: string, siteConfig: SearchEngine) {
   container.className = 'chat-gpt-container'
+  // container.setAttribute("onchange", "scrollToDiv()");
 
   const userConfig = await getUserConfig()
   let theme: Theme
@@ -129,16 +135,13 @@ window.onload = function () {
       const text = event.target.value
       console.log('Enter key pressed! Text: ' + text)
       const bodyInnerText = text.trim().replace(/\s+/g, ' ').substring(0, 1500)
-      // console.log('Body: ' + bodyInnerText)
-      // console.log('location.hostname', location.hostname)
-      // console.log('siteConfig', siteConfig)
       console.log('final prompt:', bodyInnerText)
       const gpt_container = document.querySelector('div.chat-gpt-container')
       if (!gpt_container) mount(bodyInnerText, 'default', siteConfig)
       else render_already_mounted(bodyInnerText, 'default', siteConfig)
-      // const cgdpt_el = document.querySelector(".chat-gpt-container");
-      if (gpt_container)
+      if (gpt_container) {
         gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
+      }
     }
   })
 }
