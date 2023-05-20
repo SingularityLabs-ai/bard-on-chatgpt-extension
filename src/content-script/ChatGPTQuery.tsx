@@ -1,6 +1,6 @@
 import { GearIcon } from '@primer/octicons-react'
 import { useEffect, useState } from 'preact/hooks'
-import { memo, useCallback, useRef } from 'react'
+import { memo, useCallback } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
 import Browser from 'webextension-polyfill'
@@ -14,8 +14,8 @@ export type QueryStatus = 'success' | 'error' | undefined
 import { TriggerMode } from '../config'
 interface Props {
   question: string
-  contextIds: any
-  requestParams: any
+  contextIds: string[]
+  requestParams: string[]
   promptSource: string
   triggerMode: TriggerMode
   onStatusChange?: (status: QueryStatus) => void
@@ -32,7 +32,7 @@ interface ReQuestionAnswerProps {
 }
 
 function ChatGPTQuery(props: Props) {
-  const inputRef = useRef<HTMLInputElement>(null)
+  // const inputRef = useRef<HTMLInputElement>(null)
   const [answer, setAnswer] = useState<Answer | null>(null)
   const [error, setError] = useState('')
   const [retry, setRetry] = useState(0)
@@ -73,7 +73,7 @@ function ChatGPTQuery(props: Props) {
       port.onMessage.removeListener(listener)
       port.disconnect()
     }
-  }, [props.question, retry])
+  }, [props.question, props.contextIds, props.requestParams, retry])
   console.log('answer2:', answer)
   console.log('answer2?.conversationContext:', answer?.conversationContext)
 
@@ -162,14 +162,14 @@ function ChatGPTQuery(props: Props) {
   ])
 
   // * Requery Handler Function
-  const requeryHandler = useCallback(() => {
-    if (inputRef.current) {
-      setReQuestionDone(false)
-      const requestion = inputRef.current.value
-      setRequestionList([...requestionList, { requestion, index: questionIndex, answer: null }])
-      inputRef.current.value = ''
-    }
-  }, [requestionList, questionIndex])
+  // const requeryHandler = useCallback(() => {
+  //   if (inputRef.current) {
+  //     setReQuestionDone(false)
+  //     const requestion = inputRef.current.value
+  //     setRequestionList([...requestionList, { requestion, index: questionIndex, answer: null }])
+  //     inputRef.current.value = ''
+  //   }
+  // }, [requestionList, questionIndex])
 
   const ReQuestionAnswerFixed = ({ text }: { text: string | undefined }) => {
     if (!text) return <p className="text-[#b6b8ba] animate-pulse">Answering...</p>

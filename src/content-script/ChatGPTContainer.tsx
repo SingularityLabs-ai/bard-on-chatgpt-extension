@@ -7,8 +7,8 @@ import { QueryStatus } from './ChatGPTQuery'
 
 interface Props {
   question: string
-  contextIds: any
-  requestParams: any
+  contextIds: string[]
+  requestParams: string[]
   promptSource: string
   triggerMode: TriggerMode
 }

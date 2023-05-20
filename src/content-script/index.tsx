@@ -137,7 +137,8 @@ window.onload = function () {
       if (!gpt_container) mount(bodyInnerText, 'default', siteConfig)
       else render_already_mounted(bodyInnerText, 'default', siteConfig)
       // const cgdpt_el = document.querySelector(".chat-gpt-container");
-      gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
+      if (gpt_container)
+        gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
     }
   })
 }
