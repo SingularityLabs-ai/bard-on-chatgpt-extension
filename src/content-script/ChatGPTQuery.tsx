@@ -206,25 +206,6 @@ function ChatGPTQuery(props: Props) {
         <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>
           {answer.text}
         </ReactMarkdown>
-        <div className="question-container">
-          {requestionList.map((requestion) => (
-            <div key={requestion.index}>
-              <div className="font-bold">{`Q${requestion.index + 1} : ${
-                requestion.requestion
-              }`}</div>
-              {reError ? (
-                <p>
-                  Failed to load response from BARD:
-                  <span className="break-all block">{reError}</span>
-                </p>
-              ) : requestion.index < requestionList.length - 1 ? (
-                <ReQuestionAnswerFixed text={requestion.answer?.text} />
-              ) : (
-                <ReQuestionAnswer latestAnswerText={reQuestionLatestAnswerText} />
-              )}
-            </div>
-          ))}
-        </div>
       </div>
     )
   }
