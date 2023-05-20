@@ -145,3 +145,8 @@ window.onload = function () {
     }
   })
 }
+
+window.setInterval(function () {
+  const gpt_container = document.querySelector('div.chat-gpt-container')
+  gpt_container.scrollTop = gpt_container.scrollHeight
+}, 5000)

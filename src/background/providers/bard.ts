@@ -135,8 +135,9 @@ export class BARDProvider implements Provider {
     )
     const { text, ids } = await this.parseBartResponse(resp)
     console.debug('text:', text)
-    console.debug('response ids:', ids)
+    console.debug('contextIds :', ids)
     this.conversationContext.contextIds = ids
+    console.debug('this.conversationContext :', this.conversationContext)
 
     if (text) {
       conversationId = 'dataconversation_id'
