@@ -7,6 +7,15 @@ import { config, SearchEngine } from './search-engine-configs'
 import './styles.scss'
 import { getPossibleElementByQuerySelector } from './utils'
 
+const siteRegex = new RegExp(Object.keys(config).join('|'))
+let siteName
+try {
+  siteName = location.hostname.match(siteRegex)![0]
+} catch (error) {
+  siteName = location.pathname.match(siteRegex)![0]
+}
+const siteConfig = config[siteName]
+
 let container = document.createElement('div')
 
 async function mount(question: string, promptSource: string, siteConfig: SearchEngine) {
@@ -83,46 +92,37 @@ async function render_already_mounted(
   )
 }
 
-/**
- * mount html elements when requestions triggered
- * @param question question string
- * @param index question index
- */
-export async function requeryMount(question: string, index: number) {
-  container = document.querySelector<HTMLDivElement>('.question-container')
-  let theme: Theme
-  const questionItem = document.createElement('div')
-  questionItem.className = `question-${index}`
-
-  const userConfig = await getUserConfig()
-  if (userConfig.theme === Theme.Auto) {
-    theme = detectSystemColorScheme()
-  } else {
-    theme = userConfig.theme
-  }
-  if (theme === Theme.Dark) {
-    container?.classList.add('gpt-dark')
-    questionItem.classList.add('gpt-dark')
-  } else {
-    container?.classList.add('gpt-light')
-    questionItem.classList.add('gpt-light')
-  }
-  questionItem.innerText = `Q${index + 1} : ${question}`
-  container?.appendChild(questionItem)
+const getSiblings = (elm, withTextNodes) => {
+  if (!elm || !elm.parentNode) return
+  const siblings = [...elm.parentNode[withTextNodes ? 'childNodes' : 'children']],
+    idx = siblings.indexOf(elm)
+  siblings.before = siblings.slice(0, idx)
+  siblings.after = siblings.slice(idx + 1)
+  return siblings
 }
-
-const siteRegex = new RegExp(Object.keys(config).join('|'))
-let siteName
-try {
-  siteName = location.hostname.match(siteRegex)![0]
-} catch (error) {
-  siteName = location.pathname.match(siteRegex)![0]
-}
-const siteConfig = config[siteName]
 
 window.onload = function () {
   console.log('Page load completed')
   const textarea = document.getElementById('prompt-textarea')
+  const text_entered_button = getSiblings(textarea).after[0]
+  if (text_entered_button.tagName == 'BUTTON') {
+    text_entered_button.addEventListener('click', (event) => {
+      console.log('Pressed: ' + text_entered_button.tagName)
+      console.log('Now button press to enter(keydown) conversion step', event)
+      textarea.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          bubbles: true,
+          cancelable: true,
+          isTrusted: true,
+          key: 'Enter',
+          code: 'Enter',
+          location: 0,
+          ctrlKey: false,
+        }),
+      )
+      return false
+    })
+  }
 
   textarea.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
