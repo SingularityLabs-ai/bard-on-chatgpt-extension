@@ -61,8 +61,8 @@ function App() {
           <div className="grow flex flex-col justify-center">
             <p className="text-base px-2 text-center">
               Please login and pass Cloudflare check at{' '}
-              <a href="https://chat.openai.com" target="_blank" rel="noreferrer">
-                chat.openai.com
+              <a href="https://bard.google.com/" target="_blank" rel="noreferrer">
+                bard.google.com
               </a>
             </p>
           </div>

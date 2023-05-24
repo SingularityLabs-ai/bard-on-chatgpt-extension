@@ -214,8 +214,8 @@ function ChatGPTQuery(props: Props) {
     return (
       <p>
         Please login and pass Cloudflare check at{' '}
-        <a href="https://chat.openai.com" target="_blank" rel="noreferrer">
-          chat.openai.com
+        <a href="https://bard.google.com" target="_blank" rel="noreferrer">
+          bard.google.com
         </a>
         {retry > 0 &&
           (() => {
@@ -223,7 +223,7 @@ function ChatGPTQuery(props: Props) {
               return (
                 <span className="block mt-2">
                   Still not working? Follow{' '}
-                  <a href="https://github.com/wong2/chat-gpt-google-extension#troubleshooting">
+                  <a href="https://github.com/ishandutta2007/bard-on-chatgpt-extension#troubleshooting">
                     Brave Troubleshooting
                   </a>
                 </span>
@@ -231,8 +231,7 @@ function ChatGPTQuery(props: Props) {
             } else {
               return (
                 <span className="italic block mt-2 text-xs">
-                  OpenAI requires passing a security check every once in a while. If this keeps
-                  happening, change AI provider to OpenAI API in the extension options.
+                  Google BARD requires passing a security check every once in a while.
                 </span>
               )
             }
