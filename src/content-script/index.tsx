@@ -3,6 +3,7 @@ import '../base.css'
 import { getUserConfig, Theme } from '../config'
 import { detectSystemColorScheme } from '../utils'
 import ChatGPTContainer from './ChatGPTContainer'
+import Global from './Global'
 import { config, SearchEngine } from './search-engine-configs'
 import './styles.scss'
 import { getPossibleElementByQuerySelector } from './utils'
@@ -70,12 +71,13 @@ async function render_already_mounted(
   const allps = document.querySelectorAll('.chat-gpt-container') //#gpt-answer")
   allps[allps.length - 1].appendChild(container)
 
-  const nav_buts = document.querySelectorAll('nav button')
-  const ids = nav_buts[nav_buts.length - 1].textContent.split(',')
-  const contextIds = [ids[0], ids[1], ids[2]]
+  // const nav_buts = document.querySelectorAll('nav button')
+  // const ids = nav_buts[nav_buts.length - 1].textContent.split(',')
+  // console.log('ids from html', ids);
+  const contextIds = Global.contextIds //[ids[0], ids[1], ids[2]]
   const requestParams = {}
-  requestParams.atValue = ids[3]
-  requestParams.blValue = ids[4]
+  requestParams.atValue = Global.atValue //ids[3]
+  requestParams.blValue = Global.blValue //ids[4]
   console.log('contextIds', contextIds)
   console.log('requestParams', requestParams)
   last_query_time = Date.now()
@@ -142,9 +144,16 @@ window.onload = function () {
 }
 
 window.setInterval(function () {
-  console.log('times=', Date.now(), last_query_time, Date.now() - last_query_time < 19000)
-  if (Date.now() - last_query_time < 24000) {
+  console.log(
+    'times=',
+    Date.now(),
+    last_query_time,
+    Date.now() - last_query_time < 19000,
+    Global.done,
+  )
+  if (Date.now() - last_query_time < 19000 && Global.done == true) {
     const gpt_container = document.querySelector('div.chat-gpt-container')
     gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
+    Global.done = false
   }
 }, 5000)

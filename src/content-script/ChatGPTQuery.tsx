@@ -7,6 +7,7 @@ import Browser from 'webextension-polyfill'
 import { captureEvent } from '../analytics'
 import { Answer } from '../messaging'
 import ChatGPTFeedback from './ChatGPTFeedback'
+import Global from './Global'
 import { isBraveBrowser, shouldShowRatingTip } from './utils.js'
 
 export type QueryStatus = 'success' | 'error' | undefined
@@ -15,7 +16,7 @@ import { TriggerMode } from '../config'
 interface Props {
   question: string
   contextIds: string[]
-  requestParams: string[]
+  requestParams: any
   promptSource: string
   triggerMode: TriggerMode
   onStatusChange?: (status: QueryStatus) => void
@@ -64,11 +65,20 @@ function ChatGPTQuery(props: Props) {
       }
     }
     port.onMessage.addListener(listener)
-    port.postMessage({
-      question: props.question,
-      contextIds: props.contextIds,
-      requestParams: props.requestParams,
-    })
+    Global.done = false
+    if (
+      (props.contextIds && props.contextIds.length > 0) ||
+      (props.requestParams &&
+        (props.requestParams.atValue != '0' || props.requestParams.blValue != '0'))
+    ) {
+      port.postMessage({
+        question: props.question,
+        contextIds: props.contextIds,
+        requestParams: props.requestParams,
+      })
+    } else {
+      port.postMessage({ question: props.question })
+    }
     return () => {
       port.onMessage.removeListener(listener)
       port.disconnect()
@@ -77,13 +87,22 @@ function ChatGPTQuery(props: Props) {
   console.log('answer2:', answer)
   console.log('answer2?.conversationContext:', answer?.conversationContext)
 
-  const nav_buts = document.querySelectorAll('nav button')
-  nav_buts[nav_buts.length - 1].innerHTML =
-    answer?.conversationContext?.contextIds +
-    ',' +
-    answer?.conversationContext?.requestParams.atValue +
-    ',' +
-    answer?.conversationContext?.requestParams.blValue
+  // const nav_buts = document.querySelectorAll('nav button')
+  // nav_buts[nav_buts.length - 1].innerHTML =
+  //   answer?.conversationContext?.contextIds +
+  //   ',' +
+  //   answer?.conversationContext?.requestParams.atValue +
+  //   ',' +
+  //   answer?.conversationContext?.requestParams.blValue
+
+  if (answer?.conversationContext) {
+    console.log('answer=', answer)
+    Global.contextIds = answer.conversationContext.contextIds
+    Global.atValue = answer.conversationContext.requestParams.atValue
+    Global.blValue = answer.conversationContext.requestParams.blValue
+    console.log('DONE')
+    Global.done = true
+  }
 
   // retry error on focus
   useEffect(() => {
