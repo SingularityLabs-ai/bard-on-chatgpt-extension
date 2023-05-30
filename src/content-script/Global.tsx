@@ -1,3 +1,4 @@
+const Global = () => { }
 export default Global
 
 Global.done = false
