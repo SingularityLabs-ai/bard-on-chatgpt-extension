@@ -190,27 +190,34 @@ function ChatGPTQuery(props: Props) {
   //   }
   // }, [requestionList, questionIndex])
 
-  const ReQuestionAnswerFixed = ({ text }: { text: string | undefined }) => {
-    if (!text) return <p className="text-[#b6b8ba] animate-pulse">Answering...</p>
-    return (
-      <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>{text}</ReactMarkdown>
-    )
-  }
+  // const ReQuestionAnswerFixed = ({ text }: { text: string | undefined }) => {
+  //   if (!text) return <p className="text-[#b6b8ba] animate-pulse">Answering...</p>
+  //   return (
+  //     <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>{text}</ReactMarkdown>
+  //   )
+  // }
 
-  const ReQuestionAnswer = ({ latestAnswerText }: ReQuestionAnswerProps) => {
-    if (!latestAnswerText || requestionList[requestionList.length - 1]?.answer?.text == undefined) {
-      return <p className="text-[#b6b8ba] animate-pulse">Answering...</p>
-    }
-    return (
-      <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>
-        {latestAnswerText}
-      </ReactMarkdown>
-    )
-  }
+  // const ReQuestionAnswer = ({ latestAnswerText }: ReQuestionAnswerProps) => {
+  //   if (!latestAnswerText || requestionList[requestionList.length - 1]?.answer?.text == undefined) {
+  //     return <p className="text-[#b6b8ba] animate-pulse">Answering...</p>
+  //   }
+  //   return (
+  //     <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>
+  //       {latestAnswerText}
+  //     </ReactMarkdown>
+  //   )
+  // }
 
   if (answer) {
     return (
       <div className="markdown-body gpt-markdown" id="gpt-answer" dir="auto">
+        <div className="gpt-header">
+          <span className="font-bold">Me</span>
+        </div>
+        <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>
+          {props.question}
+        </ReactMarkdown>
+
         <div className="gpt-header">
           <span className="font-bold">Bard</span>
           <span className="cursor-pointer leading-[0]" onClick={openOptionsPage}>
