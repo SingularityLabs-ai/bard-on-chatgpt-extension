@@ -38,6 +38,7 @@ async function runEsbuild() {
     jsx: 'automatic',
     loader: {
       '.png': 'dataurl',
+      '.svg': 'dataurl',
     },
     plugins: [
       postcssPlugin({

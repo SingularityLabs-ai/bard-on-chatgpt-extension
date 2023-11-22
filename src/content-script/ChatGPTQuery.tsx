@@ -8,6 +8,7 @@ import { captureEvent } from '../analytics'
 import { Answer } from '../messaging'
 import ChatGPTFeedback from './ChatGPTFeedback'
 import Global from './Global'
+import SingularityLabsSocial from './SingularityLabsSocial'
 import { isBraveBrowser, shouldShowRatingTip } from './utils.js'
 
 export type QueryStatus = 'success' | 'error' | undefined
@@ -213,6 +214,7 @@ function ChatGPTQuery(props: Props) {
       <div className="markdown-body gpt-markdown" id="gpt-answer" dir="auto">
         <div className="gpt-header">
           <span className="font-bold">Me</span>
+          <SingularityLabsSocial />
         </div>
         <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>
           {props.question}
