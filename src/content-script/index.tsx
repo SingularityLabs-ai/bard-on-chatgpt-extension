@@ -6,7 +6,6 @@ import ChatGPTContainer from './ChatGPTContainer'
 import Global from './Global'
 import { config, SearchEngine } from './search-engine-configs'
 import './styles.scss'
-import { getPossibleElementByQuerySelector } from './utils'
 
 const siteRegex = new RegExp(Object.keys(config).join('|'))
 let siteName
@@ -55,7 +54,7 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
     container.classList.add('gpt-light')
   }
 
-  const siderbarContainer = getPossibleElementByQuerySelector(siteConfig.sidebarContainerQuery)
+  // const siderbarContainer = getPossibleElementByQuerySelector(siteConfig.sidebarContainerQuery)
   waitForElm(siteConfig.sidebarContainerQuery).then((siderbarContainer) => {
     siderbarContainer.append(container)
   })
