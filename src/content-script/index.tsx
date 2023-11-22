@@ -19,6 +19,26 @@ const siteConfig = config[siteName]
 
 let container = document.createElement('div')
 
+function waitForElm(selector) {
+  return new Promise((resolve) => {
+    if (document.querySelector(selector)) {
+      return resolve(document.querySelector(selector))
+    }
+
+    const observer = new MutationObserver((mutations) => {
+      if (document.querySelector(selector)) {
+        observer.disconnect()
+        resolve(document.querySelector(selector))
+      }
+    })
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    })
+  })
+}
+
 async function mount(question: string, promptSource: string, siteConfig: SearchEngine) {
   container.className = 'chat-gpt-container'
 
@@ -36,17 +56,21 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
   }
 
   const siderbarContainer = getPossibleElementByQuerySelector(siteConfig.sidebarContainerQuery)
-  // console.log('siderbarContainer', siderbarContainer)
-  if (siderbarContainer) {
+  waitForElm(siteConfig.sidebarContainerQuery).then((siderbarContainer) => {
     siderbarContainer.append(container)
-  } else {
-    container.classList.add('sidebar-free')
-    const appendContainer = getPossibleElementByQuerySelector(siteConfig.appendContainerQuery)
-    // console.log('appendContainer', appendContainer)
-    if (appendContainer) {
-      appendContainer.appendChild(container)
-    }
-  }
+  })
+
+  // // console.log('siderbarContainer', siderbarContainer)
+  // if (siderbarContainer) {
+  //   siderbarContainer.append(container)
+  // } else {
+  //   container.classList.add('sidebar-free')
+  //   const appendContainer = getPossibleElementByQuerySelector(siteConfig.appendContainerQuery)
+  //   // console.log('appendContainer', appendContainer)
+  //   if (appendContainer) {
+  //     appendContainer.appendChild(container)
+  //   }
+  // }
 
   console.log('props at index(mount):', question, promptSource, userConfig.triggerMode)
 
