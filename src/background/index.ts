@@ -5,6 +5,8 @@ import { ChatGPTProvider, getChatGPTAccessToken, sendMessageFeedback } from './p
 import { OpenAIProvider } from './providers/openai'
 import { Provider } from './types'
 
+const BARDONCHATGPT_UNINSTALL_TYPEFORM_URL = 'https://survey.typeform.com/to/kvib50MU'
+
 async function generateAnswers(
   port: Browser.Runtime.Port,
   question: string,
@@ -94,3 +96,5 @@ Browser.runtime.onInstalled.addListener((details) => {
     Browser.runtime.openOptionsPage()
   }
 })
+
+Browser.runtime.setUninstallURL(BARDONCHATGPT_UNINSTALL_TYPEFORM_URL)
