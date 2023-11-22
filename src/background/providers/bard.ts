@@ -118,9 +118,9 @@ export class BARDProvider implements Provider {
   async generateAnswer(params: GenerateAnswerParams) {
     let conversationId: string | undefined
     const cleanup = () => {
-      if (conversationId) {
-        setConversationProperty(this.token, conversationId, { is_visible: false })
-      }
+      // if (conversationId) {
+      //   setConversationProperty(this.token, conversationId, { is_visible: false })
+      // }
     }
     // this.conversationContext = params.conversationContext
     this.contextIds = params.contextIds
