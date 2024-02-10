@@ -88,7 +88,7 @@ export class BARDProvider implements Provider {
   }
 
   private async fetchRequestParams() {
-    const html = await ofetch('https://bard.google.com/faq')
+    const html = await ofetch('https://gemini.google.com/faq')
     const atValue = this.extractFromHTML('SNlM0e', html)
     const blValue = this.extractFromHTML('cfb2h', html)
     return { atValue, blValue }
@@ -99,7 +99,7 @@ export class BARDProvider implements Provider {
     const payload = JSON.parse(data[0][2])
     if (!payload) {
       throw new ChatError(
-        'Failed to access Bard, make sure you are loggedin at https://bard.google.com',
+        'Failed to access Bard, make sure you are loggedin at https://gemini.google.com',
         ErrorCode.BARD_EMPTY_RESPONSE,
       )
     }
@@ -142,7 +142,7 @@ export class BARDProvider implements Provider {
     console.debug('context ids:', contextIds)
     console.debug('requestParams :', requestParams)
     const resp = await ofetch(
-      'https://bard.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate',
+      'https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate',
       {
         method: 'POST',
         signal: params.signal,

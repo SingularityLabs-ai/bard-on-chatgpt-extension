@@ -242,8 +242,8 @@ function ChatGPTQuery(props: Props) {
     return (
       <p>
         Please login and pass Cloudflare check at{' '}
-        <a href="https://bard.google.com" target="_blank" rel="noreferrer">
-          bard.google.com
+        <a href="https://gemini.google.com" target="_blank" rel="noreferrer">
+          gemini.google.com
         </a>
         {retry > 0 &&
           (() => {
