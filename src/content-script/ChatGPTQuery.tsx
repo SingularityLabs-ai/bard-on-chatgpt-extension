@@ -221,7 +221,7 @@ function ChatGPTQuery(props: Props) {
         </ReactMarkdown>
 
         <div className="gpt-header">
-          <span className="font-bold">Bard</span>
+          <span className="font-bold">Gemini</span>
           <span className="cursor-pointer leading-[0]" onClick={openOptionsPage}>
             <GearIcon size={14} />
           </span>
@@ -259,7 +259,7 @@ function ChatGPTQuery(props: Props) {
             } else {
               return (
                 <span className="italic block mt-2 text-xs">
-                  Google BARD requires passing a security check every once in a while.
+                  Google Gemini requires passing a security check every once in a while.
                 </span>
               )
             }
@@ -270,13 +270,13 @@ function ChatGPTQuery(props: Props) {
   if (error) {
     return (
       <p>
-        Failed to load response from BARD:
+        Failed to load response from Gemini:
         <span className="break-all block">{error}</span>
       </p>
     )
   }
 
-  return <p className="text-[#b6b8ba] animate-pulse">Waiting for BARD...</p>
+  return <p className="text-[#b6b8ba] animate-pulse">Waiting for Gemini...</p>
 }
 
 export default memo(ChatGPTQuery)

@@ -2,12 +2,12 @@
     <img src="./src/logo.png" width="150">
 </p>
 
-<h1 align="center">BardonChatGPT</h1>
+<h1 align="center">GemGPT</h1>
 
 
 <div align="center">
 
-### BardonChatGPT is a google bard + chatgpt inside ChatGPT Web 
+### GemGPT is a google bard + chatgpt inside ChatGPT Web 
 
 [![author][author-image]][author-url]
 [![license][license-image]][license-url]
